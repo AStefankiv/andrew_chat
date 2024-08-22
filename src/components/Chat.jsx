@@ -3,6 +3,7 @@ import camera from "../img/camera.png";
 import add_friend from "../img/add-friend.png";
 import more from "../img/more.png";
 import Messages from "./Messages";
+import Input from "./Input";
 
 const Chat = () => {
   return (
@@ -16,6 +17,7 @@ const Chat = () => {
         </div>
       </div>
       <Messages />
+      <Input />
     </div>
   )
 }
