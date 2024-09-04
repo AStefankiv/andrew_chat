@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { signInWithEmailAndPassword } from "firebase/auth";
 
 const Login = () => {
@@ -27,12 +27,10 @@ const Login = () => {
         <form onSubmit={handleSubmit}>
           <input type="email" placeholder="email" />
           <input type="password" placeholder="password" />
-
           <button>Sign In</button>
+          {err && <span>Something went wrong!</span>}
         </form>
-        <p>
-          You don't have an account <a href="/login">Register</a>
-        </p>
+        <p>You don't have an account? <Link to="/register">Register</Link></p>
       </div>
     </div>
   );
