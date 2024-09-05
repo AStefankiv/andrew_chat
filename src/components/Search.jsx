@@ -1,11 +1,28 @@
 import React, { useState } from "react";
+import { collection, query, where, getDocs } from "firebase/firestore";
+import { db } from "../firebase";
 
 const Search = () => {
   const [username, setUsername] = useState("");
   const [user, setUser] = useState(null);
   const [err, setErr] = useState(false);
 
-  const handleSearch = () => {};
+  const handleSearch = async () => {
+    const q = query(
+      collection(db, "users"),
+      where("displayName", "==", username)
+    );
+
+    try {
+          const querySnapshot = getDocs(q);
+          querySnapshot.forEach((doc) => {
+            setUser(doc.data());
+            // console.log(doc.id, " => ", doc.data());
+            });
+          } catch (error) {
+            setErr(true);
+          }
+        }
 
   const handleKey = (e) => {
     e.code === "Enter" && handleSearch();
@@ -15,12 +32,13 @@ const Search = () => {
       <div className="searchForm">
         <input type="text" placeholder="Find a user" onKeyDown={handleKey} onChange={(e)=>setUsername(e.target.value)} />
         </div>
-        <div className="userChat">
-          <img src="https://hackspirit.com/wp-content/uploads/2021/06/Copy-of-Rustic-Female-Teen-Magazine-Cover.jpg" alt="user" />
+        {err && <span>User not found!</span>}
+        {user && <div className="userChat">
+          <img src={user.photoURL} alt="user" />
         <div className="userChatInfo">
-          <span>Linh</span>
+          <span>{user.displayName}</span>
           </div>
-        </div>
+        </div>}
     </div>
   )
 }
