@@ -1,11 +1,10 @@
 import React, { useState} from "react";
 import Add from "../img/add.png";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { auth, storage } from "../firebase";
+import { auth, storage, db } from "../firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { doc, setDoc } from "firebase/firestore";
 import { useNavigate, Link } from "react-router-dom";
-import { db } from "../firebase";
 
 const Register = () => {
   const [err, setErr] = useState(false);
@@ -77,7 +76,7 @@ const Register = () => {
 export default Register;
 
 
-
+//1:16:00
 
 
 
