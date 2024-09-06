@@ -34,7 +34,7 @@ const Search = () => {
   const handleSelect = async () => {
     const combinedId = currentUser.uid > user.uid ? currentUser.uid + user.uid : user.uid + currentUser.uid;
     try {
-      const res = await getDocs(db, "chats", combinedId);
+      const res = await getDoc((db, "chats", combinedId));
       if (!res.exists()) {
         await setDoc(doc (db, "chats", combinedId), {messages: []});
 
@@ -59,12 +59,19 @@ const Search = () => {
     } catch (error) {
       console.log(error);
     }
+    setUser(null);
+    setUsername("");
   }
 
   return (
     <div className="search">
       <div className="searchForm">
-        <input type="text" placeholder="Find a user" onKeyDown={handleKey} onChange={(e)=>setUsername(e.target.value)} />
+        <input type="text"
+        placeholder="Find a user"
+        onKeyDown={handleKey}
+        onChange={(e)=>setUsername(e.target.value)}
+        value={username}
+        />
         </div>
         {err && <span>User not found!</span>}
         {user && <div className="userChat" onClick={handleSelect}>
