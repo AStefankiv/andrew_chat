@@ -17,7 +17,7 @@ const Search = () => {
     );
 
     try {
-          const querySnapshot = getDocs(q);
+          const querySnapshot = await getDocs(q);
           querySnapshot.forEach((doc) => {
             setUser(doc.data());
             // console.log(doc.id, " => ", doc.data());
