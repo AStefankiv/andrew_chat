@@ -4,8 +4,9 @@ import { db } from "../firebase";
 import { onSnapshot, doc } from "firebase/firestore";
 
 const Chats = () => {
-  const [chats, setChats] = useState({});
+  const [chats, setChats] = useState([]);
   const { currentUser } = useContext(AuthContext);
+  
 
   useEffect(() => {
     const getChats = () => {
@@ -29,12 +30,12 @@ const Chats = () => {
 
   return (
     <div className="chats">
-      {Object.entries(chats).map(([id, chat]) => (
-        <div className="userChat" key={id}>
-          <img src={chat.userInfo.photoURL} alt="user" />
+      {Object.entries(chats)?.map(([chat]) => (
+        <div className="userChat" key={chat[0]}>
+          <img src={chat[1].userInfo.photoURL} alt="user" />
           <div className="userChatInfo">
-            <span>{chat.userInfo.displayName}</span>
-            <p>{chat.lastMessage?.text}</p>
+            <span>{chat[1].userInfo.displayName}</span>
+            <p>{chat[1].userInfo.lastMessage?.text}</p>
           </div>
         </div>
       ))}
