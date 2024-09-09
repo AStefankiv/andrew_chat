@@ -1,5 +1,5 @@
 import { onAuthStateChanged } from 'firebase/auth';
-import React, { createContext, useEffect, useState } from 'react';
+import React, { createContext, useEffect, useState, useReducer, useContext } from 'react';
 import { auth } from '../firebase';
 import { AuthContext } from './AuthContext';
 
@@ -35,3 +35,5 @@ export const ChatContextProvider = ({ children }) => {
       </ChatContext.Provider>
     );
 };
+
+export default ChatContextProvider;

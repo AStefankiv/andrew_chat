@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { collection, query, where, getDocs, serverTimestamp } from "firebase/firestore";
+import { collection, query, where, getDocs, serverTimestamp, getDoc, setDoc, updateDoc, doc } from "firebase/firestore";
 import { db } from "../firebase";
 import { AuthContext } from "../context/AuthContext";
 
@@ -32,9 +32,12 @@ const Search = () => {
   }
 
   const handleSelect = async () => {
-    const combinedId = currentUser.uid > user.uid ? currentUser.uid + user.uid : user.uid + currentUser.uid;
+    const combinedId =
+    currentUser.uid > user.uid
+    ? currentUser.uid + user.uid
+    : user.uid + currentUser.uid;
     try {
-      const res = await getDoc((db, "chats", combinedId));
+      const res = await getDoc(doc(db, "chats", combinedId));
       if (!res.exists()) {
         await setDoc(doc (db, "chats", combinedId), {messages: []});
 
