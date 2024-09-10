@@ -16,7 +16,6 @@ export const ChatContextProvider = ({ children }) => {
   const chatReducer = (state, action) => {
     switch (action.type) {
       case "CHANGE_USER":
-        //add
         if(!currentUser?.uid || !action.payload.uid) {
           console.log('Either current user or selected user UID is missing');
           return state;

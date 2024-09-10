@@ -48,7 +48,6 @@ const Chats = () => {
   return (
     <div className="chats">
       {Object.entries(chats)?.sort((a, b)=>b[1].date - a[1].date).map(([id, chat]) => {
-        // console.log('Chattttttttt:', chat.userInfo);
         if (!chat?.userInfo) {
           console.log(`Chat ${id} is missing userInfo`);
           return null;
