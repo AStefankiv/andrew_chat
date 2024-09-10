@@ -1,7 +1,18 @@
 import React, { useContext, useState } from "react";
-import { collection, query, where, getDocs, serverTimestamp, getDoc, setDoc, updateDoc, doc } from "firebase/firestore";
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  serverTimestamp,
+  getDoc,
+  setDoc,
+  updateDoc,
+  doc
+} from "firebase/firestore";
 import { db } from "../firebase";
 import { AuthContext } from "../context/AuthContext";
+import { ChatContext } from "../context/ChatContext";
 
 const Search = () => {
   const [username, setUsername] = useState("");
@@ -9,6 +20,7 @@ const Search = () => {
   const [err, setErr] = useState(false);
 
   const { currentUser } = useContext(AuthContext);
+  const { dispatch } = useContext(ChatContext);
 
   const handleSearch = async () => {
     const q = query(
@@ -36,6 +48,9 @@ const Search = () => {
     currentUser.uid > user.uid
     ? currentUser.uid + user.uid
     : user.uid + currentUser.uid;
+
+    console.log('Combined chat ID:', combinedId);
+
     try {
       const res = await getDoc(doc(db, "chats", combinedId));
       if (!res.exists()) {
@@ -47,7 +62,7 @@ const Search = () => {
             displayName: user.displayName,
             photoURL: user.photoURL,
           },
-          [combinedId+".date"]: serverTimestamp(),
+          [combinedId + ".date"]: serverTimestamp(),
         });
 
         await updateDoc(doc(db, "userChats", user.uid), {
@@ -56,35 +71,41 @@ const Search = () => {
             displayName: currentUser.displayName,
             photoURL: currentUser.photoURL,
           },
-          [combinedId+".date"]: serverTimestamp(),
+          [combinedId + ".date"]: serverTimestamp(),
         });
       }
+
+      dispatch({ type: "CHANGE_USER", payload: user });
+
     } catch (error) {
       console.log(error);
     }
-    setUser(null);
+    // setUser(null);
     setUsername("");
   }
 
   return (
     <div className="search">
       <div className="searchForm">
-        <input type="text"
-        placeholder="Find a user"
-        onKeyDown={handleKey}
-        onChange={(e)=>setUsername(e.target.value)}
-        value={username}
+        <input
+          type="text"
+          placeholder="Find a user"
+          onKeyDown={handleKey}
+          onChange={(e)=>setUsername(e.target.value)}
+          value={username}
         />
-        </div>
-        {err && <span>User not found!</span>}
-        {user && <div className="userChat" onClick={handleSelect}>
+      </div>
+      {err && <span>User not found!</span>}
+      {user && (
+        <div className="userChat" onClick={handleSelect}>
           <img src={user.photoURL} alt="user" />
-        <div className="userChatInfo">
-          <span>{user.displayName}</span>
+          <div className="userChatInfo">
+            <span>{user.displayName}</span>
           </div>
-        </div>}
+        </div>
+      )}
     </div>
-  )
-}
+  );
+};
 
 export default Search;

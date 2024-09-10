@@ -22,7 +22,7 @@ const Chat = () => {
       <Messages />
       <Input />
     </div>
-  )
-}
+  );
+};
 
 export default Chat;

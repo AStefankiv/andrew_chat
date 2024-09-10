@@ -7,6 +7,7 @@ export const ChatContext = createContext();
 
 export const ChatContextProvider = ({ children }) => {
   const { currentUser } = useContext(AuthContext);
+  console.log("Current user in ChatContext:", currentUser?.uid);
   const INITIAL_STATE = {
     chatId: 'null',
     user: {}
@@ -15,11 +16,19 @@ export const ChatContextProvider = ({ children }) => {
   const chatReducer = (state, action) => {
     switch (action.type) {
       case "CHANGE_USER":
+        //add
+        if(!currentUser?.uid || !action.payload.uid) {
+          console.log('Either current user or selected user UID is missing');
+          return state;
+        }
         return {
           user: action.payload,
-          chatId: action.payload.uid > state.user.uid
-          ? action.payload.uid + state.user.uid
-          : state.user.uid + action.payload.uid
+          // chatId: action.payload.uid > state.user.uid
+          // ? action.payload.uid + state.user.uid
+          // : state.user.uid + action.payload.uid
+          chatId: currentUser.uid > action.payload.uid
+          ? currentUser.uid + action.payload.uid
+          : action.payload.uid + currentUser.uid
         };
 
       default:
