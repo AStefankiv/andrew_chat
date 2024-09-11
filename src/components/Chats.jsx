@@ -18,11 +18,19 @@ const Chats = () => {
     const getChats = () => {
 
       const unsub = onSnapshot(doc(db, "userChats", currentUser.uid), (doc) => {
-        if (doc.exists()) {
-          setChats(doc.data());
-        } else {
+        if (!doc.exists()) {
           setChats({});
+          console.log('No chat data found for user:', currentUser.uid);
+        } else {
+          const chatData = doc.data();
+          if (!chatData || !chatData.userInfo) {
+            console.log('Incomplete chat data:', chatData);
+            setChats({});
+          } else {
+            setChats(chatData);
+          }
         }
+        
       });
 
       return () => {

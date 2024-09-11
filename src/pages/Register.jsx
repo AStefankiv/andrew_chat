@@ -116,6 +116,7 @@ const Register = () => {
         },
         (error) => {
           setErr(true);
+          return;
         },
         () => {
           getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {

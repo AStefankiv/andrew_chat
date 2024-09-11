@@ -1,5 +1,4 @@
 import React, { useContext } from "react";
-// import userAndrew from "../img/user_andrew.png";
 import { signOut } from "firebase/auth";
 import { AuthContext } from "../context/AuthContext";
 import { auth } from "../firebase";
