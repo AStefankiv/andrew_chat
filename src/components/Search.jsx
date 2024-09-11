@@ -36,19 +36,17 @@ const Search = () => {
           } catch (error) {
             setErr(true);
           }
-        }
+        };
+        const handleKey = (e) => {
+          e.code === "Enter" && handleSearch();
+        };
+        const handleSelect = async () => {
+          const combinedId =
+          currentUser.uid > user.uid
+        ? currentUser.uid + user.uid
+        : user.uid + currentUser.uid;
 
-  const handleKey = (e) => {
-    e.code === "Enter" && handleSearch();
-  }
-
-  const handleSelect = async () => {
-    const combinedId =
-    currentUser.uid > user.uid
-    ? currentUser.uid + user.uid
-    : user.uid + currentUser.uid;
-
-    console.log('Combined chat ID:', combinedId);
+        console.log('Combined chat ID:', combinedId);
 
     try {
       const res = await getDoc(doc(db, "chats", combinedId));
@@ -76,9 +74,8 @@ const Search = () => {
 
       dispatch({ type: "CHANGE_USER", payload: user });
 
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
+
     // setUser(null);
     setUsername("");
   }
