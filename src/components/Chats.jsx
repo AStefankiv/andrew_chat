@@ -55,7 +55,9 @@ const Chats = () => {
 
   return (
     <div className="chats">
-      {Object.entries(chats)?.sort((a, b)=>b[1].date - a[1].date).map(([id, chat]) => {
+      {Object.entries(chats)?.sort((a, b)=>b[1].date - a[1].date)
+      .filter(([id, chat]) => chat.userInfo?.uid !== currentUser.uid)
+      .map(([id, chat]) => {
         if (!chat?.userInfo) {
           console.log(`Chat ${id} is missing userInfo`);
           return null;
