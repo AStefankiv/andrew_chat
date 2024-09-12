@@ -14,9 +14,9 @@ import { AuthContext } from "../context/AuthContext";
 import { ChatContext } from "../context/ChatContext";
 
 const Search = () => {
-  const [username, setUsername] = useState(""); // For search input
-  const [users, setUsers] = useState([]); // Stores all users
-  const [filteredUsers, setFilteredUsers] = useState([]); // Stores filtered users based on search
+  const [username, setUsername] = useState("");
+  const [users, setUsers] = useState([]);
+  const [filteredUsers, setFilteredUsers] = useState([]);
   const [err, setErr] = useState(false);
 
   const { currentUser } = useContext(AuthContext); // Logged-in user
