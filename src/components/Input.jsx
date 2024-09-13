@@ -82,12 +82,19 @@ const Input = () => {
   }
 }
 
+const handleKeyDown = (e) => {
+  if (e.key === 'Enter') {
+    handleSend();
+  }
+};
+
   return (
     <div className="input">
       <input type="text"
       placeholder="Type a message..."
       onChange={e=>setText(e.target.value)}
       value={text}
+      onKeyDown={handleKeyDown}
       />
       <div className="send">
         <img src={attach} alt="" />
