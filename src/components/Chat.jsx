@@ -17,7 +17,11 @@ const Chat = ({ onToggleBackground, bgColor }) => {
       <div className="chatInfo">
         <span>{data.user?.displayName}</span>
         <div className="chatIcons">
-          <button onClick={onToggleBackground}>{bgColor === "#180161" ? <img src={light} alt="light" /> : <img src={dark} alt="dark" />}</button>
+          <button onClick={onToggleBackground}>
+            {bgColor === "#180161"
+            ? <img src={light} alt="light" />
+            : <img src={dark} alt="dark" />}
+            </button>
           <img src={camera} alt="camera" />
           <img src={add_friend} alt="" />
           <img src={more} alt="" />
