@@ -19,7 +19,7 @@ const Search = () => {
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [err, setErr] = useState(false);
 
-  const { currentUser } = useContext(AuthContext); // Logged-in user
+  const { currentUser } = useContext(AuthContext);
   const { dispatch } = useContext(ChatContext);
 
   // Fetch all users when the component mounts
