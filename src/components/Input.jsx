@@ -97,7 +97,9 @@ const handleKeyDown = (e) => {
       onKeyDown={handleKeyDown}
       />
       <div className="send">
-        <img src={attach} alt="" />
+        <label htmlFor="file">
+          <img src={attach} alt="" />
+        </label>
         <input type="file"
         style={{display: "none"}}
         id="file"
