@@ -245,7 +245,7 @@ $darkColor: #2f2d52;
       .chatIcons {
         display: flex;
         gap: 10px;
-
+        
         img {
           height: 24px;
           cursor: pointer;
@@ -257,23 +257,7 @@ $darkColor: #2f2d52;
           border: none;
           padding: 0;
           cursor: pointer;
-        }
-
-        .videoContainer {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          margin: 20px;
-        }
-        
-        .video {
-          width: 320px;
-          height: 240px;
-          transform: scaleX(-1); /* This creates the reflection effect */
-          border: 2px solid #000;
-          border-radius: 10px;
-        }
-        
+        }        
       }
 
       .messages {

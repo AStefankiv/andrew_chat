@@ -1,14 +1,17 @@
 import React, { useEffect, useRef } from "react";
+import "../../src/CameraReflection.css";
 
 const CameraReflection = ({ onClose }) => {
   const videoRef = useRef(null);
-  const streamRef = useRef(null); // Use a ref to store the stream
+  const streamRef = useRef(null);
 
   useEffect(() => {
     const startCamera = async () => {
       try {
-        const videoStream = await navigator.mediaDevices.getUserMedia({ video: true });
-        streamRef.current = videoStream; // Store the stream in the ref
+        const videoStream = await navigator.mediaDevices.getUserMedia({
+          video: true,
+        });
+        streamRef.current = videoStream;
         if (videoRef.current) {
           videoRef.current.srcObject = videoStream;
           videoRef.current.play();
@@ -25,15 +28,24 @@ const CameraReflection = ({ onClose }) => {
         streamRef.current.getTracks().forEach((track) => track.stop());
       }
     };
-  }, []); // Run only once on mount
+  }, []);
 
   return (
-    <div className="camera-reflection">
-      <h3>Camera Reflection</h3>
-      <div className="videoContainer">
-        <video ref={videoRef} className="video" autoPlay playsInline />
+    <div className="cameraReflectionOverlay" onClick={onClose}>
+      <div className="cameraReflection" onClick={(e) => e.stopPropagation()}>
+        <div className="cameraHeader">
+          <h3>Camera Reflection</h3>
+          <button className="closeButton" onClick={onClose}>
+            &times;
+          </button>
+        </div>
+        <div className="videoContainer">
+          <video ref={videoRef} className="video" autoPlay playsInline />
+        </div>
+        <button className="closeCameraButton" onClick={onClose}>
+          Close Camera
+        </button>
       </div>
-      <button onClick={onClose}>Close Camera</button>
     </div>
   );
 };
