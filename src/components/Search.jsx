@@ -22,7 +22,6 @@ const Search = () => {
   const { currentUser } = useContext(AuthContext);
   const { dispatch } = useContext(ChatContext);
 
-  // Fetch all users when the component mounts
   useEffect(() => {
     const fetchAllUsers = async () => {
       try {
@@ -31,13 +30,12 @@ const Search = () => {
         const allUsers = [];
         querySnapshot.forEach((doc) => {
           const userData = doc.data();
-          // Exclude the current logged-in user
           if (userData.uid !== currentUser.uid) {
             allUsers.push(userData);
           }
         });
-        setUsers(allUsers); // Store all users except the logged-in user
-        setFilteredUsers(allUsers); // Set initial state for filtered users
+        setUsers(allUsers);
+        setFilteredUsers(allUsers);
       } catch (error) {
         setErr(true);
         console.log("Error fetching users:", error);
@@ -47,10 +45,9 @@ const Search = () => {
     fetchAllUsers();
   }, [currentUser.uid]);
 
-  // Filter users based on the search input
   useEffect(() => {
     if (username === "") {
-      setFilteredUsers(users); // Show all users except the logged-in user if search input is empty
+      setFilteredUsers(users);
     } else {
       setFilteredUsers(
         users.filter((user) =>
@@ -70,7 +67,6 @@ const Search = () => {
       const res = await getDoc(doc(db, "chats", combinedId));
 
       if (!res.exists()) {
-        // Create a new chat in Firestore if it doesn't exist
         await setDoc(doc(db, "chats", combinedId), { messages: [] });
 
         await updateDoc(doc(db, "userChats", currentUser.uid), {
@@ -92,7 +88,6 @@ const Search = () => {
         });
       }
 
-      // Dispatch action to change the chat user
       dispatch({ type: "CHANGE_USER", payload: user });
     } catch (error) {
       console.log(error);

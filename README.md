@@ -1,23 +1,15 @@
-# Getting Started with Create React App
+# Andrew-chat
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This React.js project is built with **google-firebase**
 
-## Available Scripts
+### Steps:
+- Go to [the website](https://andrew-chatt.netlify.app/).
 
-In the project directory, you can run:
+- Proceed to the [/register page](https://andrew-chatt.netlify.app/register) to sign up.
 
-### `npm start`
+- Log in [/login](https://andrew-chatt.netlify.app/login) into your account.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- Send messages and share photos with your friends.
 
 ### `npm run build`
 
