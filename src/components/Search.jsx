@@ -18,6 +18,7 @@ const Search = () => {
   const [users, setUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [err, setErr] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
 
   const { currentUser } = useContext(AuthContext);
   const { dispatch } = useContext(ChatContext);
@@ -35,20 +36,24 @@ const Search = () => {
           }
         });
         setUsers(allUsers);
-        setFilteredUsers(allUsers);
       } catch (error) {
         setErr(true);
         console.log("Error fetching users:", error);
       }
     };
 
-    fetchAllUsers();
-  }, [currentUser.uid]);
+    // Only fetch users when searching
+    if (isSearching) {
+      fetchAllUsers();
+    }
+  }, [currentUser.uid, isSearching]);
 
   useEffect(() => {
     if (username === "") {
-      setFilteredUsers(users);
+      setFilteredUsers([]);
+      setIsSearching(false);
     } else {
+      setIsSearching(true);
       setFilteredUsers(
         users.filter((user) =>
           user.displayName.toLowerCase().includes(username.toLowerCase())
@@ -89,6 +94,9 @@ const Search = () => {
       }
 
       dispatch({ type: "CHANGE_USER", payload: user });
+      setUsername("");
+      setFilteredUsers([]);
+      setIsSearching(false);
     } catch (error) {
       console.log(error);
     }
@@ -116,7 +124,7 @@ const Search = () => {
           </div>
         ))
       ) : (
-        <span>No users found!</span>
+        username && <span>No users found!</span>
       )}
     </div>
   );

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
-import { AuthContext } from "../context/AuthContext";
+import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "../firebase";
-import { onSnapshot, doc } from "firebase/firestore";
+import { AuthContext } from "../context/AuthContext";
 import { ChatContext } from "../context/ChatContext";
 
 const Chats = () => {
@@ -9,69 +9,77 @@ const Chats = () => {
   const { currentUser } = useContext(AuthContext);
   const { dispatch } = useContext(ChatContext);
 
-  if (!currentUser?.uid) {
-    console.log('No current user found');
-    return null;
-  }
-
   useEffect(() => {
     const getChats = () => {
-
       const unsub = onSnapshot(doc(db, "userChats", currentUser.uid), (doc) => {
-        if (!doc.exists()) {
-          setChats({});
-          console.log('No chat data found for user:', currentUser.uid);
-        } else {
-          const chatData = doc.data();
-          if (!chatData || !chatData.userInfo) {
-            console.log('Incomplete chat data:', chatData);
-            setChats({});
-          } else {
-            setChats(chatData);
-          }
+        if (doc.exists()) {
+          const data = doc.data();
+          // Convert the object to array, filter valid entries, and sort by date
+          const chatsArray = Object.entries(data)
+            .map(([id, chat]) => ({
+              id,
+              ...chat
+            }))
+            .filter(chat => {
+              // Check if chat has valid userInfo
+              return chat.userInfo && 
+                     chat.userInfo.uid && 
+                     chat.userInfo.displayName && 
+                     chat.userInfo.photoURL;
+            })
+            .sort((a, b) => {
+              // Sort by date, handling missing dates
+              const dateA = a.date?.seconds || 0;
+              const dateB = b.date?.seconds || 0;
+              return dateB - dateA;
+            });
+
+          setChats(chatsArray);
         }
-        
       });
 
-      return () => {
-        unsub();
-      };
+      return () => unsub();
     };
 
-    currentUser.uid && getChats();
-  }, [currentUser]);
-
-  console.log("Current user in Chats:", currentUser);
-  console.log("Chats:", chats);
-
-  const handleSelect = (u) => {
-    console.log('Selected user:', u);
-    if (!u || !u.uid) {
-      console.log('User UID is missing');
-      return;
+    if (currentUser?.uid) {
+      getChats();
+    } else {
+      setChats([]); // Clear chats if no user
     }
-    dispatch({ type: "CHANGE_USER", payload: u });
-  }
+  }, [currentUser?.uid]);
+
+  const handleSelect = (userInfo) => {
+    if (userInfo && userInfo.uid) {
+      dispatch({ type: "CHANGE_USER", payload: userInfo });
+    }
+  };
 
   return (
     <div className="chats">
-      {Object.entries(chats)?.sort((a, b)=>b[1].date - a[1].date)
-      .filter(([id, chat]) => chat.userInfo?.uid !== currentUser.uid)
-      .map(([id, chat]) => {
-        if (!chat?.userInfo) {
-          console.log(`Chat ${id} is missing userInfo`);
-          return null;
-        }
-        return (
-        <div className="userChat" key={id} onClick={() => handleSelect(chat.userInfo)}>
-          <img src={chat.userInfo.photoURL} alt="user" />
-          <div className="userChatInfo">
-            <span>{chat.userInfo.displayName}</span>
-            <p>{chat.lastMessage?.text}</p>
+      {chats.map((chat) => (
+        chat.userInfo && (  // Additional check before rendering
+          <div
+            className="userChat"
+            key={chat.id}
+            onClick={() => handleSelect(chat.userInfo)}
+          >
+            <img 
+              src={chat.userInfo.photoURL} 
+              alt={chat.userInfo.displayName}
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = "path-to-default-avatar.png"; // Add a default avatar image
+              }}
+            />
+            <div className="userChatInfo">
+              <span>{chat.userInfo.displayName}</span>
+              {chat.lastMessage?.text && (
+                <p>{chat.lastMessage.text.slice(0, 50)}{chat.lastMessage.text.length > 50 ? '...' : ''}</p>
+              )}
+            </div>
           </div>
-        </div>
-        );
-      })}
+        )
+      ))}
     </div>
   );
 };
